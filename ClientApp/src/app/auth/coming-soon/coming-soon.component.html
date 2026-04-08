@@ -1,0 +1,65 @@
+<div class="coming-soon-container">
+  <div class="coming-soon-card">
+    <div class="back-link">
+      <a routerLink="/">← Back to Home</a>
+    </div>
+    
+    <div class="content">
+      <div class="icon">🚧</div>
+      <h1>Coming Soon</h1>
+      <h2>{{ authMethod }}</h2>
+      <p class="description">
+        This authentication method is currently under development and will be 
+        available in a future update.
+      </p>
+
+      <div class="features-preview">
+        <h3>What to Expect:</h3>
+        <div class="feature-list" *ngIf="authMethod.includes('GitHub')">
+          <div class="feature">✓ GitHub OAuth 2.0 integration</div>
+          <div class="feature">✓ Repository access scopes</div>
+          <div class="feature">✓ User profile retrieval</div>
+          <div class="feature">✓ Organization authentication</div>
+        </div>
+        
+        <div class="feature-list" *ngIf="authMethod.includes('SAML')">
+          <div class="feature">✓ Enterprise SSO integration</div>
+          <div class="feature">✓ Identity Provider configuration</div>
+          <div class="feature">✓ SAML assertions & attributes</div>
+          <div class="feature">✓ Multi-tenant support</div>
+        </div>
+        
+        <div class="feature-list" *ngIf="authMethod.includes('Biometric')">
+          <div class="feature">✓ Fingerprint authentication</div>
+          <div class="feature">✓ Face ID / Face recognition</div>
+          <div class="feature">✓ WebAuthn implementation</div>
+          <div class="feature">✓ Multi-device support</div>
+        </div>
+      </div>
+
+      <div class="cta">
+        <a routerLink="/" class="btn-primary">Explore Other Methods</a>
+        <button class="btn-secondary" disabled>Get Notified</button>
+      </div>
+
+      <div class="timeline">
+        <div class="timeline-item">
+          <div class="status completed">✓</div>
+          <div class="label">Planning & Design</div>
+        </div>
+        <div class="timeline-item">
+          <div class="status in-progress">⏳</div>
+          <div class="label">Development</div>
+        </div>
+        <div class="timeline-item">
+          <div class="status pending">○</div>
+          <div class="label">Testing</div>
+        </div>
+        <div class="timeline-item">
+          <div class="status pending">○</div>
+          <div class="label">Release</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

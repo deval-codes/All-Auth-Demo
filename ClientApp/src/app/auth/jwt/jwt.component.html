@@ -1,0 +1,154 @@
+<div class="auth-container">
+  <div class="auth-card">
+    <div class="auth-header">
+      <div class="back-link">
+        <a routerLink="/">← Back to Home</a>
+      </div>
+      <div class="icon">🎫</div>
+      <h1>JWT Token Authentication</h1>
+      <p>JSON Web Token for stateless authentication</p>
+    </div>
+
+    <!-- Login Form -->
+    <div *ngIf="!isAuthenticated" class="content">
+      <form (ngSubmit)="onLogin()" class="auth-form">
+        <div class="form-group">
+          <label for="email">Email Address</label>
+          <input 
+            type="email" 
+            id="email" 
+            [(ngModel)]="email" 
+            name="email"
+            placeholder="your@email.com"
+            required>
+        </div>
+
+        <div class="form-group">
+          <label for="password">Password</label>
+          <input 
+            type="password" 
+            id="password" 
+            [(ngModel)]="password" 
+            name="password"
+            placeholder="••••••••"
+            required>
+        </div>
+
+        <button type="submit" class="btn-submit" [disabled]="isLoading">
+          <span *ngIf="!isLoading">Get JWT Token</span>
+          <span *ngIf="isLoading" class="loading">
+            <span class="spinner"></span> Authenticating...
+          </span>
+        </button>
+      </form>
+
+      <div class="jwt-info">
+        <h4>🔐 What is JWT?</h4>
+        <p>
+          JWT (JSON Web Token) is a compact, URL-safe token format used for 
+          securely transmitting information between parties as a JSON object.
+        </p>
+        <div class="jwt-structure">
+          <div class="jwt-part header">
+            <strong>Header</strong>
+            <small>Algorithm & Token Type</small>
+          </div>
+          <span class="dot">.</span>
+          <div class="jwt-part payload">
+            <strong>Payload</strong>
+            <small>Claims & Data</small>
+          </div>
+          <span class="dot">.</span>
+          <div class="jwt-part signature">
+            <strong>Signature</strong>
+            <small>Verification</small>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Authenticated State -->
+    <div *ngIf="isAuthenticated" class="content authenticated">
+      <div class="success-badge">
+        <span class="icon-check">✓</span>
+        <span>Authenticated Successfully</span>
+      </div>
+
+      <div class="token-section">
+        <div class="section-header">
+          <h3>Your JWT Token</h3>
+          <button class="btn-copy" (click)="copyToken()">📋 Copy</button>
+        </div>
+        <div class="token-display">
+          <code class="token-string">{{ jwtToken }}</code>
+        </div>
+      </div>
+
+      <div class="token-breakdown">
+        <h3>Token Breakdown</h3>
+        
+        <div class="breakdown-section header">
+          <div class="section-label">
+            <span class="color-dot"></span>
+            Header
+          </div>
+          <pre class="code-block">{{ formatJson(decodedToken.header) }}</pre>
+          <small>Declares token type (JWT) and signing algorithm (HS256)</small>
+        </div>
+
+        <div class="breakdown-section payload">
+          <div class="section-label">
+            <span class="color-dot"></span>
+            Payload
+          </div>
+          <pre class="code-block">{{ formatJson(decodedToken.payload) }}</pre>
+          <small>Contains claims (user data, expiration, etc.)</small>
+        </div>
+
+        <div class="breakdown-section signature">
+          <div class="section-label">
+            <span class="color-dot"></span>
+            Signature
+          </div>
+          <pre class="code-block">HMACSHA256(
+  base64UrlEncode(header) + "." +
+  base64UrlEncode(payload),
+  secret
+)</pre>
+          <small>Ensures token hasn't been tampered with</small>
+        </div>
+      </div>
+
+      <div class="token-usage">
+        <h4>📤 How to Use</h4>
+        <div class="usage-example">
+          <strong>Authorization Header:</strong>
+          <code class="inline-code">Authorization: Bearer {{ '{' }}jwtToken{{ '}' }}</code>
+        </div>
+        <div class="usage-example">
+          <strong>Example API Call:</strong>
+          <pre class="api-example">fetch('/api/protected', {{ '{' }}
+  headers: {{ '{' }}
+    'Authorization': 'Bearer ' + token
+  {{ '}' }}
+{{ '}' }})</pre>
+        </div>
+      </div>
+
+      <button class="btn-logout" (click)="logout()">Logout</button>
+    </div>
+
+    <div class="auth-footer">
+      <div class="info-box">
+        <h4>💡 About JWT</h4>
+        <ul>
+          <li><strong>Stateless:</strong> No server-side session storage needed</li>
+          <li><strong>Portable:</strong> Can be used across different domains</li>
+          <li><strong>Self-contained:</strong> Contains all user information</li>
+          <li><strong>Secure:</strong> Signed to prevent tampering (use HTTPS!)</li>
+          <li><strong>Storage:</strong> Store in httpOnly cookies or memory (avoid localStorage for sensitive data)</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>

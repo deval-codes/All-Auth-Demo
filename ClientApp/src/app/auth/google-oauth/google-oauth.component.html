@@ -1,0 +1,121 @@
+<div class="auth-container">
+  <div class="auth-card">
+    <div class="auth-header">
+      <div class="back-link">
+        <a routerLink="/">← Back to Home</a>
+      </div>
+      <div class="icon">🔵</div>
+      <h1>Google OAuth 2.0</h1>
+      <p>Sign in with your Google account</p>
+    </div>
+
+    <!-- Initial State -->
+    <div *ngIf="step === 'initial'" class="content">
+      <div class="google-login-section">
+        <button class="google-btn" (click)="initiateGoogleLogin()" [disabled]="isLoading">
+          <svg class="google-icon" viewBox="0 0 48 48">
+            <path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"></path>
+            <path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"></path>
+            <path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"></path>
+            <path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"></path>
+            <path fill="none" d="M0 0h48v48H0z"></path>
+          </svg>
+          <span>Continue with Google</span>
+        </button>
+
+        <div class="features">
+          <div class="feature-item">
+            <span class="check">✓</span>
+            <span>Quick and secure authentication</span>
+          </div>
+          <div class="feature-item">
+            <span class="check">✓</span>
+            <span>No password required</span>
+          </div>
+          <div class="feature-item">
+            <span class="check">✓</span>
+            <span>Access with existing Google account</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="divider">
+        <span>OR</span>
+      </div>
+
+      <button class="btn-secondary">
+        Sign in with email
+      </button>
+    </div>
+
+    <!-- Redirecting State -->
+    <div *ngIf="step === 'redirecting'" class="content redirect-state">
+      <div class="loading-spinner"></div>
+      <h3>Redirecting to Google...</h3>
+      <p>Please wait while we redirect you to Google's secure login page</p>
+      <div class="oauth-flow">
+        <div class="flow-step active">
+          <div class="step-number">1</div>
+          <div class="step-label">Initiating OAuth</div>
+        </div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-step">
+          <div class="step-number">2</div>
+          <div class="step-label">Google Login</div>
+        </div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-step">
+          <div class="step-number">3</div>
+          <div class="step-label">Authorization</div>
+        </div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-step">
+          <div class="step-number">4</div>
+          <div class="step-label">Callback</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Success/Callback State -->
+    <div *ngIf="step === 'callback'" class="content success-state">
+      <div class="success-icon">✅</div>
+      <h3>Successfully Authenticated!</h3>
+      <div class="user-info">
+        <div class="user-avatar">{{ mockUser.picture }}</div>
+        <div class="user-details">
+          <div class="user-name">{{ mockUser.name }}</div>
+          <div class="user-email">{{ mockUser.email }}</div>
+        </div>
+      </div>
+      <div class="token-info">
+        <h4>Received Tokens:</h4>
+        <div class="token-item">
+          <strong>Access Token:</strong>
+          <code>ya29.a0AfH6SMB...</code>
+        </div>
+        <div class="token-item">
+          <strong>ID Token (JWT):</strong>
+          <code>eyJhbGciOiJSUzI1...</code>
+        </div>
+        <div class="token-item">
+          <strong>Expires In:</strong>
+          <code>3600 seconds</code>
+        </div>
+      </div>
+      <button class="btn-submit" (click)="reset()">Try Again</button>
+    </div>
+
+    <div class="auth-footer">
+      <div class="info-box">
+        <h4>💡 About Google OAuth 2.0</h4>
+        <ul>
+          <li><strong>Protocol:</strong> OAuth 2.0 Authorization Code Flow</li>
+          <li><strong>Scopes:</strong> profile, email, openid</li>
+          <li><strong>Token:</strong> Access token + ID token (JWT)</li>
+          <li><strong>Security:</strong> PKCE recommended for SPAs</li>
+          <li><strong>Setup:</strong> Requires Google Cloud Console configuration</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>

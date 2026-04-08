@@ -1,0 +1,89 @@
+<div class="home-container">
+  <header class="hero">
+    <div class="hero-content">
+      <h1 class="hero-title">Authentication & Authorization Demo</h1>
+      <p class="hero-subtitle">
+        Explore different authentication methods and authorization patterns
+      </p>
+      <div class="hero-badges">
+        <span class="badge">UI Demo</span>
+        <span class="badge">Angular 17</span>
+        <span class="badge">Modern Auth</span>
+      </div>
+    </div>
+  </header>
+
+  <section class="auth-methods">
+    <div class="section-header">
+      <h2>Available Authentication Methods</h2>
+      <p>Click on any card to see the authentication UI demo</p>
+    </div>
+
+    <div class="cards-grid">
+      <div 
+        *ngFor="let method of authMethods" 
+        class="auth-card"
+        [class.coming-soon]="method.status === 'coming-soon'"
+        [style.--card-color]="method.color">
+        
+        <div class="card-header">
+          <div class="icon">{{ method.icon }}</div>
+          <span *ngIf="method.status === 'coming-soon'" class="status-badge">Coming Soon</span>
+          <span *ngIf="method.status === 'active'" class="status-badge active">Active</span>
+        </div>
+
+        <div class="card-body">
+          <h3>{{ method.title }}</h3>
+          <p>{{ method.description }}</p>
+        </div>
+
+        <div class="card-footer">
+          <a 
+            *ngIf="method.status === 'active'" 
+            [routerLink]="method.route" 
+            class="btn-demo">
+            View Demo →
+          </a>
+          <button 
+            *ngIf="method.status === 'coming-soon'" 
+            class="btn-demo disabled" 
+            disabled>
+            Coming Soon
+          </button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="info-section">
+    <div class="info-card">
+      <h3>📚 About This Demo</h3>
+      <p>
+        This is a UI-focused demonstration of various authentication and authorization methods.
+        Each demo showcases the user interface and flow without actual backend integration.
+      </p>
+    </div>
+
+    <div class="info-card">
+      <h3>🎯 What You'll Learn</h3>
+      <ul>
+        <li>Different authentication patterns</li>
+        <li>User interface best practices</li>
+        <li>Security considerations</li>
+        <li>User experience flows</li>
+      </ul>
+    </div>
+
+    <div class="info-card">
+      <h3>🚀 Roadmap</h3>
+      <ul>
+        <li>✅ Username & Password</li>
+        <li>✅ OAuth 2.0 (Google & Generic)</li>
+        <li>✅ JWT & Session-based</li>
+        <li>🔄 GitHub OAuth</li>
+        <li>🔄 SAML 2.0</li>
+        <li>🔄 Biometric Authentication</li>
+      </ul>
+    </div>
+  </section>
+</div>

@@ -1,0 +1,136 @@
+<div class="auth-container">
+  <div class="auth-card">
+    <div class="auth-header">
+      <div class="back-link">
+        <a routerLink="/">← Back to Home</a>
+      </div>
+      <div class="icon">🔓</div>
+      <h1>OAuth 2.0 Authentication</h1>
+      <p>Generic OAuth 2.0 flow demonstration</p>
+    </div>
+
+    <!-- Provider Selection -->
+    <div *ngIf="step === 'select'" class="content">
+      <h3>Select OAuth Provider</h3>
+      <div class="providers-grid">
+        <button 
+          *ngFor="let provider of providers" 
+          class="provider-btn"
+          [style.--provider-color]="provider.color"
+          (click)="selectProvider(provider.name)">
+          <span class="provider-icon">{{ provider.icon }}</span>
+          <span class="provider-name">{{ provider.name }}</span>
+        </button>
+      </div>
+
+      <div class="flow-diagram">
+        <h4>OAuth 2.0 Flow</h4>
+        <div class="flow-steps">
+          <div class="flow-step">
+            <div class="step-num">1</div>
+            <div class="step-desc">Authorization Request</div>
+          </div>
+          <div class="flow-arrow">↓</div>
+          <div class="flow-step">
+            <div class="step-num">2</div>
+            <div class="step-desc">User Consent</div>
+          </div>
+          <div class="flow-arrow">↓</div>
+          <div class="flow-step">
+            <div class="step-num">3</div>
+            <div class="step-desc">Authorization Code</div>
+          </div>
+          <div class="flow-arrow">↓</div>
+          <div class="flow-step">
+            <div class="step-num">4</div>
+            <div class="step-desc">Token Exchange</div>
+          </div>
+          <div class="flow-arrow">↓</div>
+          <div class="flow-step">
+            <div class="step-num">5</div>
+            <div class="step-desc">Access Token</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Authorization in Progress -->
+    <div *ngIf="step === 'authorize'" class="content auth-progress">
+      <div class="loading-spinner"></div>
+      <h3>Authorizing with {{ selectedProvider }}...</h3>
+      <p>Redirecting to provider's authorization page</p>
+      
+      <div class="auth-details">
+        <div class="detail-item">
+          <strong>Client ID:</strong>
+          <code>demo-client-id-12345</code>
+        </div>
+        <div class="detail-item">
+          <strong>Redirect URI:</strong>
+          <code>https://yourapp.com/callback</code>
+        </div>
+        <div class="detail-item">
+          <strong>Scope:</strong>
+          <code>read write profile</code>
+        </div>
+        <div class="detail-item">
+          <strong>State:</strong>
+          <code>{{ authCode || 'generating...' }}</code>
+        </div>
+      </div>
+    </div>
+
+    <!-- Callback Success -->
+    <div *ngIf="step === 'callback'" class="content callback-state">
+      <div class="success-icon">✅</div>
+      <h3>Authorization Successful!</h3>
+      <p>Received tokens from {{ selectedProvider }}</p>
+
+      <div class="token-display">
+        <div class="token-section">
+          <h4>1️⃣ Authorization Code</h4>
+          <code class="code-block">{{ authCode }}</code>
+          <small>Exchanged with authorization server for access token</small>
+        </div>
+
+        <div class="exchange-arrow">⬇️</div>
+
+        <div class="token-section">
+          <h4>2️⃣ Access Token</h4>
+          <code class="code-block">{{ accessToken }}</code>
+          <small>Used to access protected resources</small>
+        </div>
+
+        <div class="token-metadata">
+          <div class="meta-item">
+            <strong>Token Type:</strong>
+            <span>Bearer</span>
+          </div>
+          <div class="meta-item">
+            <strong>Expires In:</strong>
+            <span>3600 seconds</span>
+          </div>
+          <div class="meta-item">
+            <strong>Scope:</strong>
+            <span>read write profile</span>
+          </div>
+        </div>
+      </div>
+
+      <button class="btn-submit" (click)="reset()">Try Another Provider</button>
+    </div>
+
+    <div class="auth-footer">
+      <div class="info-box">
+        <h4>💡 About OAuth 2.0</h4>
+        <ul>
+          <li><strong>Grant Types:</strong> Authorization Code, Implicit, Client Credentials, Password</li>
+          <li><strong>Components:</strong> Resource Owner, Client, Authorization Server, Resource Server</li>
+          <li><strong>Security:</strong> PKCE for public clients, state parameter for CSRF protection</li>
+          <li><strong>Tokens:</strong> Access Token (API access), Refresh Token (renew access)</li>
+          <li><strong>Use Cases:</strong> Third-party app access, SSO, API authentication</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>

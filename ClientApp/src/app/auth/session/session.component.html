@@ -1,0 +1,198 @@
+<div class="auth-container">
+  <div class="auth-card">
+    <div class="auth-header">
+      <div class="back-link">
+        <a routerLink="/">← Back to Home</a>
+      </div>
+      <div class="icon">🍪</div>
+      <h1>Session-Based Authentication</h1>
+      <p>Server-side session management with cookies</p>
+    </div>
+
+    <!-- Login Form -->
+    <div *ngIf="!isAuthenticated" class="content">
+      <form (ngSubmit)="onLogin()" class="auth-form">
+        <div class="form-group">
+          <label for="username">Username</label>
+          <input 
+            type="text" 
+            id="username" 
+            [(ngModel)]="username" 
+            name="username"
+            placeholder="Enter your username"
+            required>
+        </div>
+
+        <div class="form-group">
+          <label for="password">Password</label>
+          <input 
+            type="password" 
+            id="password" 
+            [(ngModel)]="password" 
+            name="password"
+            placeholder="••••••••"
+            required>
+        </div>
+
+        <button type="submit" class="btn-submit" [disabled]="isLoading">
+          <span *ngIf="!isLoading">Create Session</span>
+          <span *ngIf="isLoading" class="loading">
+            <span class="spinner"></span> Authenticating...
+          </span>
+        </button>
+      </form>
+
+      <div class="session-flow">
+        <h4>📋 Session Flow</h4>
+        <div class="flow-steps">
+          <div class="step">
+            <div class="step-icon">1️⃣</div>
+            <div class="step-content">
+              <strong>Login Request</strong>
+              <small>User submits credentials</small>
+            </div>
+          </div>
+          <div class="arrow">↓</div>
+          <div class="step">
+            <div class="step-icon">2️⃣</div>
+            <div class="step-content">
+              <strong>Verify Credentials</strong>
+              <small>Server validates user</small>
+            </div>
+          </div>
+          <div class="arrow">↓</div>
+          <div class="step">
+            <div class="step-icon">3️⃣</div>
+            <div class="step-content">
+              <strong>Create Session</strong>
+              <small>Store in server memory/database</small>
+            </div>
+          </div>
+          <div class="arrow">↓</div>
+          <div class="step">
+            <div class="step-icon">4️⃣</div>
+            <div class="step-content">
+              <strong>Set Cookie</strong>
+              <small>Send session ID to client</small>
+            </div>
+          </div>
+          <div class="arrow">↓</div>
+          <div class="step">
+            <div class="step-icon">5️⃣</div>
+            <div class="step-content">
+              <strong>Subsequent Requests</strong>
+              <small>Cookie sent automatically</small>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Authenticated State -->
+    <div *ngIf="isAuthenticated" class="content authenticated">
+      <div class="success-banner">
+        <span class="icon">✓</span>
+        <div class="banner-text">
+          <strong>Session Created Successfully</strong>
+          <small>Your session is active and securely stored</small>
+        </div>
+      </div>
+
+      <div class="session-info">
+        <h3>📊 Active Session Details</h3>
+        <div class="info-grid">
+          <div class="info-item">
+            <div class="info-label">Session ID</div>
+            <code class="info-value">{{ sessionData.sessionId }}</code>
+          </div>
+          <div class="info-item">
+            <div class="info-label">User ID</div>
+            <code class="info-value">{{ sessionData.userId }}</code>
+          </div>
+          <div class="info-item">
+            <div class="info-label">Username</div>
+            <code class="info-value">{{ sessionData.username }}</code>
+          </div>
+          <div class="info-item">
+            <div class="info-label">IP Address</div>
+            <code class="info-value">{{ sessionData.ipAddress }}</code>
+          </div>
+          <div class="info-item">
+            <div class="info-label">Created At</div>
+            <code class="info-value">{{ sessionData.createdAt | date:'short' }}</code>
+          </div>
+          <div class="info-item">
+            <div class="info-label">Expires At</div>
+            <code class="info-value">{{ sessionData.expiresAt | date:'short' }}</code>
+          </div>
+        </div>
+
+        <div class="session-timer">
+          <div class="timer-icon">⏱️</div>
+          <div class="timer-text">
+            <strong>Time Remaining:</strong>
+            <span>{{ getTimeRemaining() }}</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="cookies-section">
+        <h3>🍪 Browser Cookies</h3>
+        <div class="cookie-list">
+          <div *ngFor="let cookie of cookies" class="cookie-item">
+            <div class="cookie-header">
+              <strong>{{ cookie.name }}</strong>
+              <div class="cookie-flags">
+                <span class="flag" *ngIf="cookie.httpOnly">HttpOnly</span>
+                <span class="flag" *ngIf="cookie.secure">Secure</span>
+                <span class="flag">{{ cookie.sameSite }}</span>
+              </div>
+            </div>
+            <code class="cookie-value">{{ cookie.value }}</code>
+          </div>
+        </div>
+      </div>
+
+      <div class="server-storage">
+        <h3>💾 Server-Side Storage</h3>
+        <div class="storage-info">
+          <p>Session data is stored on the server in:</p>
+          <ul>
+            <li>Memory (Redis, Memcached)</li>
+            <li>Database (PostgreSQL, MongoDB)</li>
+            <li>File system</li>
+          </ul>
+          <div class="storage-diagram">
+            <div class="diagram-item">
+              <strong>Client</strong>
+              <code>Cookie: session_id=abc123</code>
+            </div>
+            <div class="diagram-arrow">→</div>
+            <div class="diagram-item">
+              <strong>Server</strong>
+              <code>Session Store[abc123] = {{ '{' }}user data{{ '}' }}</code>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <button class="btn-logout" (click)="logout()">
+        End Session & Logout
+      </button>
+    </div>
+
+    <div class="auth-footer">
+      <div class="info-box">
+        <h4>💡 About Session-Based Auth</h4>
+        <ul>
+          <li><strong>Stateful:</strong> Server maintains session state in memory/database</li>
+          <li><strong>Secure:</strong> Session data never exposed to client</li>
+          <li><strong>Scalability:</strong> Requires sticky sessions or shared session store</li>
+          <li><strong>Cookie Security:</strong> HttpOnly prevents XSS, Secure for HTTPS, SameSite for CSRF</li>
+          <li><strong>Expiration:</strong> Sessions can be expired on timeout or logout</li>
+          <li><strong>Use Cases:</strong> Traditional web apps, high-security requirements</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
