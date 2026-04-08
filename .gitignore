@@ -15,3 +15,5 @@ obj/
 
 # Env
 .env
+/backend/AllAuthDemo.Api/appsettings.json
+/backend/AllAuthDemo.Api/Properties/launchSettings.json
